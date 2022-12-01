@@ -1,1 +1,1 @@
-web: python manage.py migrate && gunicorn lelang_donasi.wsgi
+web: python manage.py migrate && gunicorn lelang_donasi.wsgi && python manage.py loaddata initial_testimoni.json
