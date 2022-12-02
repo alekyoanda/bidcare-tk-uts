@@ -3,7 +3,7 @@ import random
 from testimoni.models import TestimoniList
 from testimoni.forms import TestimoniForm
 
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from django.core import serializers
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
@@ -79,4 +79,4 @@ def add_testimoni_flutter(request):
     new_testimoni = TestimoniList(**new_data)
     new_testimoni.save()
 
-    return HttpResponse(status=200)
+    return JsonResponse({"success" : "Data Testimoni Telah Diperbarui"})
