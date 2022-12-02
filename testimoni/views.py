@@ -1,3 +1,4 @@
+import json
 import random
 from testimoni.models import TestimoniList
 from testimoni.forms import TestimoniForm
@@ -6,6 +7,7 @@ from django.http import HttpResponse
 from django.core import serializers
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import csrf_exempt
 
 # Create your views here.
 
@@ -67,5 +69,14 @@ def add_testimoni(request) :
         # Membuat objek testimoni baru dan save
         testimoni_baru = TestimoniList(user=user_logged_in, nama=nama, target=target, pesan=pesan)
         testimoni_baru.save()
+
+    return HttpResponse(status=200)
+
+@csrf_exempt
+def add_testimoni_flutter(request):
+    data = request.body.decode('utf-8')
+    new_data = json.loads(data)
+    new_testimoni = TestimoniList(**new_data)
+    new_testimoni.save()
 
     return HttpResponse(status=200)
