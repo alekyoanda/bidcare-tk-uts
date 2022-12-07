@@ -84,5 +84,14 @@ def show_detail_galang(request, id):
     }
     return render(request, "resipien/detail-galang.html",  context)
 
+def show_json_galang(request):
+    data_galang = GalangDana.objects.all().order_by('-status_keaktifan')
+    return HttpResponse(serializers.serialize("json", data_galang), content_type="application/json")
 
+def show_json_detail(request, id):
+    objek_galang = GalangDana.objects.get(id=id)
+    return HttpResponse(serializers.serialize("json", objek_galang), content_type="application/json")    
 
+def show_json_komentar(request, id):
+    data_komentar = KomentarGalang.objects.filter(objek_galang=id)
+    return HttpResponse(serializers.serialize("json", data_komentar), content_type="application/json")  
