@@ -95,3 +95,8 @@ def show_json_detail(request, id):
 def show_json_komentar(request, id):
     data_komentar = KomentarGalang.objects.filter(objek_galang=id)
     return HttpResponse(serializers.serialize("json", data_komentar), content_type="application/json")  
+
+def show_json_lelang(request, id):
+    objek_galang = GalangDana.objects.get(id=id)
+    objek_lelang = BarangLelang.objects.filter(galang_dana_tujuan = objek_galang).order_by('-status_keaktifan', 'tanggal_berakhir')
+    return HttpResponse(serializers.serialize("json", objek_lelang), content_type="application/json")  
