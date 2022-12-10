@@ -3,7 +3,7 @@ from django.shortcuts import redirect, render
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 from general_user.forms import RekeningBankForm
-from general_user.models import GeneralUser
+from general_user.models import GeneralUser, RekeningBank
 from resipien.models import GalangDana, KomentarGalang
 from resipien.forms import GalangForm, KomentarGalangForm
 import datetime
@@ -84,5 +84,19 @@ def show_detail_galang(request, id):
     }
     return render(request, "resipien/detail-galang.html",  context)
 
+def show_json_galang(request):
+    data_galang = GalangDana.objects.all().order_by('-status_keaktifan')
+    return HttpResponse(serializers.serialize("json", data_galang), content_type="application/json")
 
+def show_json_bank(request, id):
+    akun_bank = RekeningBank.objects.filter(pk = id)
+    return HttpResponse(serializers.serialize("json", akun_bank), content_type="application/json")  
 
+def show_json_komentar(request, id):
+    data_komentar = KomentarGalang.objects.filter(objek_galang=id)
+    return HttpResponse(serializers.serialize("json", data_komentar), content_type="application/json")  
+
+def show_json_lelang(request, id):
+    objek_galang = GalangDana.objects.get(id=id)
+    objek_lelang = BarangLelang.objects.filter(galang_dana_tujuan = objek_galang).order_by('-status_keaktifan', 'tanggal_berakhir')
+    return HttpResponse(serializers.serialize("json", objek_lelang), content_type="application/json")  

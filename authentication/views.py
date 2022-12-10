@@ -1,7 +1,4 @@
 from django.shortcuts import render
-
-# Create your views here.
-from django.shortcuts import render
 from django.contrib.auth import authenticate, login as auth_login
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
