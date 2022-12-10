@@ -92,10 +92,31 @@ def rincian_lelang(request, lelang_id):
 
 def get_rincian_lelang_json(request, id):
     barang_lelang = BarangLelang.objects.get(pk=id)
+    user_pelelang = barang_lelang.pelelang.user.username
     penggalang_dana = barang_lelang.galang_dana_tujuan
+    user_bid_tertinggi = Bid.objects.filter(barang_lelang=id).order_by('-banyak_bid').first().user.user.username
+    komentar = Komentar.objects.filter(barang_lelang=id)
+
+    komentar_json = json.loads(serializers.serialize('json', komentar))
+    barang_lelang_json = json.loads(serializers.serialize('json', [barang_lelang]))[0]
+    galang_dana_tujuan_json = json.loads(serializers.serialize('json', [penggalang_dana]))[0]
+    response = {
+        "barang_lelang": barang_lelang_json,
+        "user_pelelang": user_pelelang,
+        "galang_dana_tujuan": galang_dana_tujuan_json,
+        "user_galang_dana": penggalang_dana.user.user.username,
+        "user_bid_tertinggi": user_bid_tertinggi,
+        "semua_komentar": komentar_json
+    }
+    print(response)
+    return JsonResponse(response, safe=False)
+
+def bids_json(request):
+    bids = Bid.objects.all()
+    response = json.loads(serializers.serialize('json', bids))
+    print(response)
     
-    
-    return JsonResponse()
+    return JsonResponse(response, safe=False)
 
 @login_required(login_url='/login')
 def bid_barang_lelang(request, lelang_id):
