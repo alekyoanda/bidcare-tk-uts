@@ -6,6 +6,7 @@ from django.http import HttpResponse
 from django.core import serializers
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
+from django.views.decorators.csrf import csrf_exempt
 
 # Create your views here.
 
@@ -47,7 +48,7 @@ def show_random_testimoni(request):
     return HttpResponse(serializers.serialize('json', random_testimoni), content_type="application/json")
 
 # Method untuk menambahkan testimoni (dibutuhkan login akun)
-@login_required(login_url='/login')
+@csrf_exempt
 def add_testimoni(request) :
     if request.method == "POST" :
         
