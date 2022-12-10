@@ -44,7 +44,9 @@ INSTALLED_APPS = [
     'resipien',
     'lelang',
     'customer_service',
-    'testimoni'
+    'testimoni',
+    'authentication',
+    'corsheaders'
 ]
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
@@ -58,7 +60,15 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
 ]
+
+CORS_ALLOW_ALL_ORIGINS=True
+CORS_ALLOW_CREDENTIALS=True
+CSRF_COOKIE_SECURE = True
+SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SAMESITE = 'None'
+SESSION_COOKIE_SAMESITE = 'None'
 
 ROOT_URLCONF = "lelang_donasi.urls"
 
@@ -79,6 +89,7 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = "lelang_donasi.wsgi.application"
+
 
 
 # Database
