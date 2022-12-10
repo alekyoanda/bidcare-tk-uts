@@ -1,6 +1,5 @@
 from datetime import date, datetime
 import json
-from telnetlib import GA
 from urllib import response
 from django.shortcuts import redirect, render
 from django.http import HttpResponse, HttpResponseBadRequest, HttpResponseRedirect, JsonResponse
@@ -90,6 +89,13 @@ def rincian_lelang(request, lelang_id):
         "bid_diberikan": bid_diberikan
     }
     return render(request, "lelang/rincian_lelang.html", context)
+
+def get_rincian_lelang_json(request, id):
+    barang_lelang = BarangLelang.objects.get(pk=id)
+    penggalang_dana = barang_lelang.galang_dana_tujuan
+    
+    
+    return JsonResponse()
 
 @login_required(login_url='/login')
 def bid_barang_lelang(request, lelang_id):
