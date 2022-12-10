@@ -14,6 +14,7 @@ urlpatterns = [
     path('komentar_barang_lelang/<int:lelang_id>', views.komentar_barang_lelang, name="komentar_barang_lelang"),
     path('json', views.get_json_lelang, name="get_json_lelang"),
     path('json/<int:id>', views.get_rincian_lelang_json, name="get_rincian_json_lelang"),
+    path('komentar/json', views.komentar_json, name="komentar_json")
     # path('kategori/<str:nama_kategori>/json', views.get_json_lelang_by_kategori, name="get_json_lelang_by_kateori"),
     # path('kategori/<str:nama_kategori>', views.index_by_kategori, name="show_lelang_by_kategori")
 ]
