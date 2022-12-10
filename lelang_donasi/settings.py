@@ -55,7 +55,6 @@ INSTALLED_APPS = [
     'customer_service',
     'testimoni',
     'authentication',
-    'corsheaders'
 ]
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
