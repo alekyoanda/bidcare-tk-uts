@@ -1,6 +1,6 @@
 from django.urls import path
 from resipien import views
-from resipien.views import show_buat_galang, show_daftar_galang, show_detail_galang, show_json_galang, show_json_detail, show_json_komentar, show_json_lelang
+from resipien.views import show_buat_galang, show_daftar_galang, show_detail_galang, show_json_galang, show_json_komentar, show_json_lelang, show_json_bank
 
 
 app_name = "resipien"
@@ -11,7 +11,7 @@ urlpatterns = [
     path('daftar/', show_daftar_galang, name='daftar'),
     path('detail/<int:id>/', show_detail_galang, name='detail'),
     path('json', show_json_galang, name='json-galang'),
-    path('detailjson/<int:id>/', show_json_detail, name='json-detail'),
     path('komentarjson/<int:id>/', show_json_komentar, name='json-komen'),
     path('lelangjson/<int:id>/', show_json_lelang, name='json-lelang'),
+    path('bankjson/<int:id>/', show_json_bank, name='json-bank'),
 ]
