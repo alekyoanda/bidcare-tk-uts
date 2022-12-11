@@ -130,28 +130,6 @@ def flutter_buat_galang(request):
     return HttpResponseNotFound()
 
 @csrf_exempt
-def flutter_tambah_komentar(request):
-    if request.method == "POST":
-        user = GeneralUser.objects.get(user=request.user)
-        tujuan = request.POST.get("tujuan")
-        judul = request.POST.get("judul")
-        deskripsi = request.POST.get("deskripsi")
-        target = request.POST.get("target")
-        tanggal_pembuatan = datetime.datetime.now()
-        tanggal_berakhir = request.POST.get("tanggal_berakhir")
-        terkumpul = 0
-        status_keaktifan = True
-        nama_pemilik = request.POST.get("nama_pemilik")
-        nama_bank = request.POST.get("nama_bank")
-        no_rekening = request.POST.get("no_rekening")
-        akun_bank = RekeningBank.objects.create(nama_pemilik = nama_pemilik, nama_bank = nama_bank, no_rekening = no_rekening)
-        GalangDana.objects.create(user=user, akun_bank=akun_bank, tujuan=tujuan, judul=judul, deskripsi=deskripsi, target=target, tanggal_pembuatan=tanggal_pembuatan, tanggal_berakhir=tanggal_berakhir, status_keaktifan=status_keaktifan, terkumpul=terkumpul)
-
-        return HttpResponse(b"CREATED", status=201)
-            
-    return HttpResponseNotFound()
-
-@csrf_exempt
 def flutter_tambah_komentar(request, id):
     if request.method == "POST":
         user = GeneralUser.objects.get(user=request.user)
