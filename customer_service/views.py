@@ -55,7 +55,9 @@ def nanya_flutter(request):
                             "teks_pertanyaan": new_pertanyaan.teks_pertanyaan, 
                             "is_answered": new_pertanyaan.is_answered } }
     
-        return HttpResponse()
+        return HttpResponse(b"CREATED", status=201)
+            
+    return HttpResponseNotFound()
     
 # @staff_member_required
 # def jawab(request,id):
