@@ -140,3 +140,9 @@ def show_json_galang(request):
     # data = GalangDana.objects.filter(user=GeneralUser.objects.get(user=request.user))
     data = GalangDana.objects.all()
     return HttpResponse(serializers.serialize("json", data), content_type="application/json")
+
+
+def show_nama(request):
+    JsonResponse({
+                "nama": request.user.username,
+            }, status=200)

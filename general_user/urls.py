@@ -13,5 +13,6 @@ urlpatterns = [
     path('get_lelang/<id>', views.get_lelang, name="get_lelang"),
     path('get_galang2/json/', views.show_json_galang, name="show_json_galang"),
     path('get_lelang2/json/', views.show_json_lelang, name="show_json_lelang"),
+    path('get_nama', views.show_nama, name="show_nama"),
 
 ]
