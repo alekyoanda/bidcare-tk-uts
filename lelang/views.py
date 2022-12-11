@@ -11,6 +11,7 @@ from lelang.models import BarangLelang, Bid, Komentar
 from resipien.models import GalangDana
 from django.contrib.auth.decorators import login_required
 from django.core import serializers
+from django.views.decorators.csrf import csrf_exempt
 
 # Create your views here.
 def index(request):
@@ -47,6 +48,7 @@ def get_json_lelang_by_kategori(request, nama_kategori):
     return JsonResponse(response, safe=False)
 
 @login_required(login_url='/login')
+@csrf_exempt
 def create_lelang(request, galang_dana_id):
     galang_dana_tujuan = GalangDana.objects.get(pk=galang_dana_id)
     form = BarangLelangForm()
@@ -131,6 +133,7 @@ def komentar_json(request):
     return JsonResponse(response, safe=False)
 
 @login_required(login_url='/login')
+@csrf_exempt
 def bid_barang_lelang(request, lelang_id):
     if request.method == "POST":
         form = BiddingForm(request.POST)
@@ -151,6 +154,7 @@ def bid_barang_lelang(request, lelang_id):
         return HttpResponseBadRequest(barang_lelang.bid_tertinggi)
         
 @login_required(login_url='/login')
+@csrf_exempt
 def komentar_barang_lelang(request, lelang_id):
     if request.method == "POST":
         form = KomentarForm(request.POST)
