@@ -143,6 +143,6 @@ def show_json_galang(request):
 
 
 def show_nama(request):
-    JsonResponse({
+    return JsonResponse({
                 "nama": request.user.username,
             }, status=200)
