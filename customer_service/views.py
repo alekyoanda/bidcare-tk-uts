@@ -41,6 +41,22 @@ def pertanyaan_masuk(request):
     
     return render(request, "pertanyaan_masuk.html", context)
 
+@csrf_exempt
+def nanya_flutter(request):
+    if request.method == "POST":
+        kategori = request.POST.get('kategori')
+        teks_pertanyaan = request.POST.get('teks_pertanyaan')
+        new_pertanyaan = Pertanyaan(kategori=kategori, teks_pertanyaan=teks_pertanyaan)
+        new_pertanyaan.save()
+
+        res = { "model": "customer_service.pertanyaan", 
+                "pk": new_pertanyaan.pk, 
+                "fields": { "kategori": new_pertanyaan.kategori, 
+                            "teks_pertanyaan": new_pertanyaan.teks_pertanyaan, 
+                            "is_answered": new_pertanyaan.is_answered } }
+    
+        return HttpResponse()
+    
 # @staff_member_required
 # def jawab(request,id):
 #     form_jawaban = JawabanForm(request.POST)
