@@ -10,6 +10,7 @@ from general_user.forms import RegisterForm, RekeningBankForm
 from general_user.models import GeneralUser
 from resipien.models import GalangDana
 from lelang.models import BarangLelang
+from django.views.decorators.csrf import csrf_exempt
 # Create your views here.
 
 def homepage(request):
@@ -35,6 +36,27 @@ def login_user(request):
     form = AuthenticationForm()
     context = {"form": form}
     return render(request, "general_user/login.html", context)
+
+@csrf_exempt
+def login_user_flutter(request):
+    if request.method == 'POST':
+        print('masuk ke post login')
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+        print(username, password)
+        user = authenticate(request, username=username, password=password)
+        if user is not None:
+            login(request, user) # melakukan login terlebih dahulu
+            return JsonResponse({
+                "status": True,
+                "message": "Successfully Logged In!",
+                # Insert any extra data if you want to pass data to Flutter
+                }, status=200)
+        else:
+            return JsonResponse({
+                "status": False,
+                "message": "Failed to Login, check your email/password."
+            }, status=401)
 
 def register(request):
     form = RegisterForm()
