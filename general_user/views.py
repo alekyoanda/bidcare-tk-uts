@@ -10,6 +10,7 @@ from general_user.forms import RegisterForm, RekeningBankForm
 from general_user.models import GeneralUser
 from resipien.models import GalangDana
 from lelang.models import BarangLelang
+from django.views.decorators.csrf import csrf_exempt
 # Create your views here.
 
 def homepage(request):
