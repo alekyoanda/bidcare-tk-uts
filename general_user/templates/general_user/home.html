@@ -12,7 +12,7 @@
     <script>
         $(document).ready(function () {
             $('#myGalang').click(function(){
-                $.get(`/get_galang/json`, function(data) {
+                $.get(`/get_galang2/json`, function(data) {
                     $(`#grid_card`).html(``);
                     for (var i = 0; i < data.length; i++) {
                         $(`#grid_card`).append(card_galang(data[i]));
@@ -20,7 +20,7 @@
                 });
             })
             $('#myLelang').click(function(){
-                $.get(`/get_lelang/json`, function(data) {
+                $.get(`/get_lelang2/json`, function(data) {
                     $(`#grid_card`).html(``);
                     for (var i = 0; i < data.length; i++) {
                         $(`#grid_card`).append(card_lelang(data[i]));
