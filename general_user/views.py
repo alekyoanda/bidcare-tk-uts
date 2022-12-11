@@ -46,14 +46,12 @@ def login_user_flutter(request):
         print('masuk ke post login')
         username = request.POST.get('username')
         password = request.POST.get('password')
-        print(username, password)
         user = authenticate(request, username=username, password=password)
         if user is not None:
             login(request, user) # melakukan login terlebih dahulu
             return JsonResponse({
                 "status": True,
                 "message": "Successfully Logged In!",
-                "user_id": GeneralUser.objects.get(user=user),
                 # Insert any extra data if you want to pass data to Flutter
                 }, status=200)
         else:
