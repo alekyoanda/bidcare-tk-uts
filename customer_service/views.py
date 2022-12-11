@@ -1,4 +1,4 @@
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseNotFound
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 from customer_service.forms import JawabanForm, PertanyaanForm
