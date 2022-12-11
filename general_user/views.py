@@ -1,5 +1,4 @@
 
-import datetime
 from django.shortcuts import redirect, render, get_object_or_404
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.forms import AuthenticationForm
@@ -11,7 +10,6 @@ from general_user.forms import RegisterForm, RekeningBankForm
 from general_user.models import GeneralUser
 from resipien.models import GalangDana
 from lelang.models import BarangLelang
-from django.views.decorators.csrf import csrf_exempt
 # Create your views here.
 
 def homepage(request):
@@ -30,9 +28,7 @@ def login_user(request):
         user = authenticate(request, username=username, password=password)
         if user is not None:
             login(request, user)
-            response = HttpResponseRedirect(reverse('general_user:homepage'))
-            response.set_cookie('last_login', str(datetime.datetime.now()))
-            return response
+            return HttpResponseRedirect(reverse('general_user:homepage'))
         else:
             messages.info(request, 'Email atau password tidak valid.')
 
@@ -75,7 +71,7 @@ def register(request):
             
             login(request, user)
 
-            return redirect('general_user:login')
+            return redirect('general_user:homepage')
         else:
             print(form_bank.errors)
             
@@ -84,9 +80,7 @@ def register(request):
 
 def logout_user(request):
     logout(request)
-    response = HttpResponseRedirect(reverse('general_user:homepage'))
-    response.delete_cookie('last_login')
-    return response
+    return HttpResponseRedirect(reverse('general_user:homepage'))
 
 def get_galang(request, id):
     if request.method == "GET":
