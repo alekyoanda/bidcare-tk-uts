@@ -7,11 +7,12 @@ from general_user.models import GeneralUser, RekeningBank
 from resipien.models import GalangDana, KomentarGalang
 from resipien.forms import GalangForm, KomentarGalangForm
 import datetime
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseNotFound
 from django.core import serializers
 from django.views.decorators.csrf import csrf_protect
 from django.utils.timesince import timesince
 from lelang.models import BarangLelang
+from django.views.decorators.csrf import csrf_exempt
 
 # Create your views here.
 
@@ -100,3 +101,67 @@ def show_json_lelang(request, id):
     objek_galang = GalangDana.objects.get(id=id)
     objek_lelang = BarangLelang.objects.filter(galang_dana_tujuan = objek_galang).order_by('-status_keaktifan', 'tanggal_berakhir')
     return HttpResponse(serializers.serialize("json", objek_lelang), content_type="application/json")  
+
+def show_json_akun(request, id):
+    objek_user = GeneralUser.objects.filter(pk=id)
+    return HttpResponse(serializers.serialize("json", objek_user), content_type="application/json")  
+
+# Flutter
+@csrf_exempt
+def flutter_buat_galang(request):
+    if request.method == "POST":
+        user = GeneralUser.objects.get(user=request.user)
+        tujuan = request.POST.get("tujuan")
+        judul = request.POST.get("judul")
+        deskripsi = request.POST.get("deskripsi")
+        target = request.POST.get("target")
+        tanggal_pembuatan = datetime.datetime.now()
+        tanggal_berakhir = request.POST.get("tanggal_berakhir")
+        terkumpul = 0
+        status_keaktifan = True
+        nama_pemilik = request.POST.get("nama_pemilik")
+        nama_bank = request.POST.get("nama_bank")
+        no_rekening = request.POST.get("no_rekening")
+        akun_bank = RekeningBank.objects.create(nama_pemilik = nama_pemilik, nama_bank = nama_bank, no_rekening = no_rekening)
+        GalangDana.objects.create(user=user, akun_bank=akun_bank, tujuan=tujuan, judul=judul, deskripsi=deskripsi, target=target, tanggal_pembuatan=tanggal_pembuatan, tanggal_berakhir=tanggal_berakhir, status_keaktifan=status_keaktifan, terkumpul=terkumpul)
+
+        return HttpResponse(b"CREATED", status=201)
+            
+    return HttpResponseNotFound()
+
+@csrf_exempt
+def flutter_tambah_komentar(request):
+    if request.method == "POST":
+        user = GeneralUser.objects.get(user=request.user)
+        tujuan = request.POST.get("tujuan")
+        judul = request.POST.get("judul")
+        deskripsi = request.POST.get("deskripsi")
+        target = request.POST.get("target")
+        tanggal_pembuatan = datetime.datetime.now()
+        tanggal_berakhir = request.POST.get("tanggal_berakhir")
+        terkumpul = 0
+        status_keaktifan = True
+        nama_pemilik = request.POST.get("nama_pemilik")
+        nama_bank = request.POST.get("nama_bank")
+        no_rekening = request.POST.get("no_rekening")
+        akun_bank = RekeningBank.objects.create(nama_pemilik = nama_pemilik, nama_bank = nama_bank, no_rekening = no_rekening)
+        GalangDana.objects.create(user=user, akun_bank=akun_bank, tujuan=tujuan, judul=judul, deskripsi=deskripsi, target=target, tanggal_pembuatan=tanggal_pembuatan, tanggal_berakhir=tanggal_berakhir, status_keaktifan=status_keaktifan, terkumpul=terkumpul)
+
+        return HttpResponse(b"CREATED", status=201)
+            
+    return HttpResponseNotFound()
+
+@csrf_exempt
+def flutter_tambah_komentar(request, id):
+    if request.method == "POST":
+        user = GeneralUser.objects.get(user=request.user)
+        username = request.user.get_username()        
+        objek_galang = GalangDana.objects.get(id=id)
+        komentar = request.POST.get('komentar')
+        tanggal_komentar = datetime.datetime.now()
+        KomentarGalang.objects.create(user=user, username=username, objek_galang=objek_galang, komentar=komentar, tanggal_komentar=tanggal_komentar)
+
+        return HttpResponse(b"CREATED", status=201)
+            
+    return HttpResponseNotFound()
+
