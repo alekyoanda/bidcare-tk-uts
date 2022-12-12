@@ -98,6 +98,8 @@ def register_flutter(request):
         no_rekening = request.POST.get('no_rekening')
         nama_pemilik = request.POST.get('nama_pemilik')
         is_user_already_exist = User.objects.filter(username=username).exists()
+        is_no_rekening_exist = RekeningBank.objects.filter(no_rekening = no_rekening).exists()
+        is_no_telepon_exist = GeneralUser.objects.filter(no_ponsel = nomor_ponsel).exists()
         # return  HttpResponse(serializers.serialize("json", is_user_already_exist), content_type="application/json")
         print(username)
         print(is_user_already_exist)
@@ -115,6 +117,16 @@ def register_flutter(request):
             return JsonResponse({
               "status": False,
               "message": "Password harus sama"
+            }, status=401)
+        elif (is_no_rekening_exist):
+            return JsonResponse({
+              "status": False,
+              "message": "Nomor rekening sudah dipakai"
+            }, status=401)
+        elif (is_no_telepon_exist):
+            return JsonResponse({
+              "status": False,
+              "message": "Nomor telepon sudah dipakai"
             }, status=401)
         elif (not is_user_already_exist):
             user = User.objects.create_user(username=username,password=password)
