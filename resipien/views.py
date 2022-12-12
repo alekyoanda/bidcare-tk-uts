@@ -131,11 +131,12 @@ def flutter_buat_galang(request):
     return HttpResponseNotFound()
 
 @csrf_exempt
-def flutter_tambah_komentar(request, id):
+def flutter_tambah_komentar(request):
     if request.method == "POST":
+        idx = idx = int(request.POST.get('idx'))
         user = GeneralUser.objects.get(user=request.user)
         username = request.user.get_username()        
-        objek_galang = GalangDana.objects.get(id=id)
+        objek_galang = GalangDana.objects.get(id=idx)
         komentar = request.POST.get('komentar')
         tanggal_komentar = datetime.datetime.now()
         KomentarGalang.objects.create(user=user, username=username, objek_galang=objek_galang, komentar=komentar, tanggal_komentar=tanggal_komentar)
