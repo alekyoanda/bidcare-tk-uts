@@ -136,6 +136,7 @@ def komentar_json(request):
 @csrf_exempt
 def bid_barang_lelang(request, lelang_id):
     if request.method == "POST":
+        print(request.POST)
         form = BiddingForm(request.POST)
         barang_lelang = BarangLelang.objects.get(pk=lelang_id)
         if form.is_valid():
