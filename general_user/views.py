@@ -84,6 +84,8 @@ def register(request):
 
 @csrf_exempt
 def register_flutter(request):
+    is_user_already_exist = User.objects.filter(username="roy.maruli")
+    return  HttpResponse(serializers.serialize("json", is_user_already_exist), content_type="application/json")
     if request.method == 'POST':
         first_name = request.POST.get('first_name')
         last_name = request.POST.get('last_name')
