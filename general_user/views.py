@@ -84,70 +84,94 @@ def register(request):
 
 @csrf_exempt
 def register_flutter(request):
-    # is_user_already_exist = User.objects.filter(username="cobacobacoba")
-    # print(is_user_already_exist.exists())
-    # return  HttpResponse(serializers.serialize("json", is_user_already_exist), content_type="application/json")
-    if request.method == 'POST':
-        first_name = request.POST.get('first_name')
-        last_name = request.POST.get('last_name')
-        email = request.POST.get('email')
-        username = request.POST.get('username')
-        password = request.POST.get('first_name')
-        nomor_ponsel = request.POST.get('nomor_ponsel')
-        nama_bank = request.POST.get('nama_bank')
-        no_rekening = request.POST.get('no_rekening')
-        nama_pemilik = request.POST.get('nama_pemilik')
-        is_user_already_exist = User.objects.filter(username=username).exists()
-        is_no_rekening_exist = RekeningBank.objects.filter(no_rekening = no_rekening).exists()
-        is_no_telepon_exist = GeneralUser.objects.filter(no_ponsel = nomor_ponsel).exists()
-        # return  HttpResponse(serializers.serialize("json", is_user_already_exist), content_type="application/json")
-        print(username)
-        print(is_user_already_exist)
-        if (first_name == '') or (last_name == '') or (email =='') or (username == '') or (password == '') or (nomor_ponsel == '') or (no_rekening == '') or (nama_pemilik == ''): 
-            return JsonResponse({
-              "status": False,
-              "message": "Harap mengisi semua form :)"
-            }, status=401)
-        elif (len(nomor_ponsel)>16 or not nomor_ponsel.isnumeric()):
-            return JsonResponse({
-              "status": False,
-              "message": "Nomor Ponsel yang dimasukkan tidak sesuai :)"
-            }, status=401)
-        elif (len(no_rekening)>16 or not no_rekening.isnumeric()):
-            return JsonResponse({
-              "status": False,
-              "message": "Password harus sama"
-            }, status=401)
-        elif (is_no_rekening_exist):
-            return JsonResponse({
-              "status": False,
-              "message": "Nomor rekening sudah dipakai"
-            }, status=401)
-        elif (is_no_telepon_exist):
-            return JsonResponse({
-              "status": False,
-              "message": "Nomor telepon sudah dipakai"
-            }, status=401)
-        elif (not is_user_already_exist):
-            user = User.objects.create_user(username=username,password=password)
-            user.save()
-            rekening_bank = RekeningBank.objects.create(nama_pemilik = nama_pemilik, nama_bank = nama_bank, no_rekening = no_rekening)
-            rekening_bank.save()
-            GeneralUser.objects.create(user=user, akun_bank=rekening_bank, no_ponsel = nomor_ponsel)
-            # user=authenticate(request, username=username, password=password)
+    form = RegisterForm()
+    form_bank = RekeningBankForm()
+    
+    if request.method == "POST":
+        form = RegisterForm(request.POST)
+        form_bank = RekeningBankForm(request.POST)
+        if form.is_valid() and form_bank.is_valid():
+            user = form.save()
+            rekening_bank = form_bank.save()
+            GeneralUser.objects.create(user=user, akun_bank=rekening_bank, no_ponsel=form.cleaned_data.get('no_ponsel'))
             return JsonResponse({
                 "status": True,
-                "username": user.username,
+                'message': 'User successfully registered'
             }, status=200)
         else:
             return JsonResponse({
-              "status": False,
-              "message": "Username sudah terdaftar"
-            }, status=401)
-    else:
-        return JsonResponse({
-            "status": "Something Wrong T_T"
-        }, status=401)
+                "status": False,
+                'message': 'Something went wrong T_T'
+            }, status=400)
+            
+    context = {"form": form, "form_bank": form_bank}
+    return render(request, "general_user/register.html", context)
+# @csrf_exempt
+# def register_flutter(request):
+#     # is_user_already_exist = User.objects.filter(username="cobacobacoba")
+#     # print(is_user_already_exist.exists())
+#     # return  HttpResponse(serializers.serialize("json", is_user_already_exist), content_type="application/json")
+#     if request.method == 'POST':
+#         first_name = request.POST.get('first_name')
+#         last_name = request.POST.get('last_name')
+#         email = request.POST.get('email')
+#         username = request.POST.get('username')
+#         password = request.POST.get('first_name')
+#         nomor_ponsel = request.POST.get('nomor_ponsel')
+#         nama_bank = request.POST.get('nama_bank')
+#         no_rekening = request.POST.get('no_rekening')
+#         nama_pemilik = request.POST.get('nama_pemilik')
+#         is_user_already_exist = User.objects.filter(username=username).exists()
+#         is_no_rekening_exist = RekeningBank.objects.filter(no_rekening = no_rekening).exists()
+#         is_no_telepon_exist = GeneralUser.objects.filter(no_ponsel = nomor_ponsel).exists()
+#         # return  HttpResponse(serializers.serialize("json", is_user_already_exist), content_type="application/json")
+#         print(username)
+#         print(is_user_already_exist)
+#         if (first_name == '') or (last_name == '') or (email =='') or (username == '') or (password == '') or (nomor_ponsel == '') or (no_rekening == '') or (nama_pemilik == ''): 
+#             return JsonResponse({
+#               "status": False,
+#               "message": "Harap mengisi semua form :)"
+#             }, status=401)
+#         elif (len(nomor_ponsel)>16 or not nomor_ponsel.isnumeric()):
+#             return JsonResponse({
+#               "status": False,
+#               "message": "Nomor Ponsel yang dimasukkan tidak sesuai :)"
+#             }, status=401)
+#         elif (len(no_rekening)>16 or not no_rekening.isnumeric()):
+#             return JsonResponse({
+#               "status": False,
+#               "message": "Password harus sama"
+#             }, status=401)
+#         elif (is_no_rekening_exist):
+#             return JsonResponse({
+#               "status": False,
+#               "message": "Nomor rekening sudah dipakai"
+#             }, status=401)
+#         elif (is_no_telepon_exist):
+#             return JsonResponse({
+#               "status": False,
+#               "message": "Nomor telepon sudah dipakai"
+#             }, status=401)
+#         elif (not is_user_already_exist):
+#             user = User.objects.create_user(username=username,password=password)
+#             user.save()
+#             rekening_bank = RekeningBank.objects.create(nama_pemilik = nama_pemilik, nama_bank = nama_bank, no_rekening = no_rekening)
+#             rekening_bank.save()
+#             GeneralUser.objects.create(user=user, akun_bank=rekening_bank, no_ponsel = nomor_ponsel)
+#             # user=authenticate(request, username=username, password=password)
+#             return JsonResponse({
+#                 "status": True,
+#                 "username": user.username,
+#             }, status=200)
+#         else:
+#             return JsonResponse({
+#               "status": False,
+#               "message": "Username sudah terdaftar"
+#             }, status=401)
+#     else:
+#         return JsonResponse({
+#             "status": "Something Wrong T_T"
+#         }, status=401)
 
 def logout_user(request):
     logout(request)
