@@ -9,6 +9,7 @@ from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_exempt
 
 # Create your views here.
+
 # Method untuk menampilkan testimoni dari semua pengguna
 def show_testimoni(request) :   
     # Menampilkan semua testimoni (maupun bagi yang belum login)
