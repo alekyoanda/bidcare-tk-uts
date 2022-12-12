@@ -16,5 +16,5 @@ urlpatterns = [
     path('bankjson/<int:id>/', show_json_bank, name='json-bank'),
     path('akunjson/<int:id>/', show_json_akun, name='json-akun'),
     path("fbuatGalang/", flutter_buat_galang, name="flutter-buat"),
-    path("ftambahKomentar/<int:id>/", flutter_tambah_komentar, name="flutter-komen"),
+    path("ftambahKomentar/", flutter_tambah_komentar, name="flutter-komen"),
 ]
