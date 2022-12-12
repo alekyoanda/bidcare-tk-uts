@@ -81,6 +81,8 @@ def register(request):
             
     context = {"form": form, "form_bank": form_bank}
     return render(request, "general_user/register.html", context)
+
+@csrf_exempt
 def register_flutter(request):
     if request.method == 'POST':
         first_name = request.POST.get('first_name')
