@@ -105,7 +105,7 @@ def register_flutter(request):
               "status": False,
               "message": "Nomor Ponsel yang dimasukkan tidak sesuai :)"
             }, status=401)
-        elif (len(no_rekening)>16 or no_rekening.isnumeric()):
+        elif (len(no_rekening)>16 or not no_rekening.isnumeric()):
             return JsonResponse({
               "status": False,
               "message": "Password harus sama"
