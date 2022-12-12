@@ -92,12 +92,7 @@ def show_detail_galang(request, id):
     return render(request, "resipien/detail-galang.html",  context)
 
 def show_json_galang(request):
-    data_galang = GalangDana.objects.all().order_by('-status_keaktifan')
-    data_galang.terkumpul = 0
-    objek_lelang = BarangLelang.objects.filter(galang_dana_tujuan = data_galang).order_by('-status_keaktifan', 'tanggal_berakhir')
-    for lelang in objek_lelang:
-        data_galang.terkumpul += lelang.bid_tertinggi
-        data_galang.save()
+    data_galang = GalangDana.objects.all().order_by('-status_keaktifan')    
     return HttpResponse(serializers.serialize("json", data_galang), content_type="application/json")
 
 def show_json_bank(request, id):
