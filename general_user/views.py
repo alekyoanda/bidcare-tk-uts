@@ -84,8 +84,8 @@ def register(request):
 
 @csrf_exempt
 def register_flutter(request):
-    is_user_already_exist = User.objects.filter(username="cobacobacoba")
-    return  HttpResponse(serializers.serialize("json", is_user_already_exist), content_type="application/json")
+    # is_user_already_exist = User.objects.filter(username="cobacobacoba")
+    # return  HttpResponse(serializers.serialize("json", is_user_already_exist), content_type="application/json")
     if request.method == 'POST':
         first_name = request.POST.get('first_name')
         last_name = request.POST.get('last_name')
@@ -96,8 +96,8 @@ def register_flutter(request):
         nama_bank = request.POST.get('nama_bank')
         no_rekening = request.POST.get('no_rekening')
         nama_pemilik = request.POST.get('nama_pemilik')
-        is_user_already_exist = User.objects.filter(username=username)
-        return  HttpResponse(serializers.serialize("json", is_user_already_exist), content_type="application/json")
+        is_user_already_exist = User.objects.filter(username=username).exists()
+        # return  HttpResponse(serializers.serialize("json", is_user_already_exist), content_type="application/json")
         print(username)
         print(is_user_already_exist)
         if (first_name == '') or (last_name == '') or (email =='') or (username == '') or (password == '') or (nomor_ponsel == '') or (no_rekening == '') or (nama_pemilik == ''): 
