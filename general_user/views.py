@@ -77,7 +77,7 @@ def register(request):
 
             return redirect('general_user:homepage')
         else:
-            print(form_bank.errors)
+            print(form_bank.errors )
             
     context = {"form": form, "form_bank": form_bank}
     return render(request, "general_user/register.html", context)
