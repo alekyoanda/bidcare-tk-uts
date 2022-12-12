@@ -62,7 +62,7 @@
                     <h5 class="card-title" id="judul" style="color:black">{{ galang.judul}}</h5>
                     <p id="pembuat" style="color:orange"> {{ galang.user.user.username }} </p>
                     <span id="terkumpul" style="color:green;">Terkumpul Rp. {{ galang.terkumpul }}</span>
-                    <progress class="progress-bar bg-success rounded" width="{{rasio_donasi}}" value = '{{rasio_donasi}}' max = '100' min='0' style="width: 100%"></progress>
+                    <progress class="progress-bar bg-success rounded" value = "{{ galang.terkumpul }}" max = "{{ galang.target }}" style="width: 100%"></progress>
                 </div>
                 <div class="card-footer text-muted">
                     <small id="durasi" style="color:gray"> <i class="fa fa-clock-o"></i> {{ galang.tanggal_berakhir|timeuntil }}</small>

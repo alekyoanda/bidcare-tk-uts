@@ -1,4 +1,4 @@
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseNotFound
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 from customer_service.forms import JawabanForm, PertanyaanForm
@@ -40,6 +40,55 @@ def pertanyaan_masuk(request):
     }
     
     return render(request, "pertanyaan_masuk.html", context)
+
+@csrf_exempt
+def nanya_flutter(request):
+    if request.method == "POST":
+        kategori = request.POST.get('kategori')
+        teks_pertanyaan = request.POST.get('teks_pertanyaan')
+        new_pertanyaan = Pertanyaan(kategori=kategori, teks_pertanyaan=teks_pertanyaan)
+        new_pertanyaan.save()
+
+        res = { "model": "customer_service.pertanyaan", 
+                "pk": new_pertanyaan.pk, 
+                "fields": { "kategori": new_pertanyaan.kategori, 
+                            "teks_pertanyaan": new_pertanyaan.teks_pertanyaan, 
+                            "is_answered": new_pertanyaan.is_answered } }
+    
+        return HttpResponse(b"CREATED", status=201)
+            
+    return HttpResponseNotFound()
+
+@csrf_exempt
+def jawab_flutter(request, id):
+    if request.method == "POST":
+        jawaban = request.POST.get('jawaban')
+        pertanyaan = Pertanyaan.objects.get(id=id)
+        pertanyaan.is_answered = True
+        pertanyaan.save()
+
+        new_faq = FAQ(pertanyaan=pertanyaan, jawaban=jawaban)
+        new_faq.save()
+
+        res = { "model": "customer_service.faq", 
+                "pk": new_faq.pk, 
+                "fields": { "pertanyaan": { "model": "customer_service.pertanyaan", 
+                                            "pk": new_faq.pertanyaan.pk, 
+                                            "fields": { "kategori": new_faq.pertanyaan.kategori, 
+                                                        "teks_pertanyaan": new_faq.pertanyaan.teks_pertanyaan, 
+                                                        "is_answered": new_faq.pertanyaan.is_answered } }, 
+                            "jawaban": new_faq.jawaban } }
+       
+        return HttpResponse(b"CREATED", status=201)
+            
+    return HttpResponseNotFound()
+
+@csrf_exempt
+def delete_flutter(request,id):
+    pertanyaan_del = Pertanyaan.objects.get(id=id)
+    pertanyaan_del.delete()
+
+    return HttpResponse(b"CREATED", status=201)
 
 # @staff_member_required
 # def jawab(request,id):
