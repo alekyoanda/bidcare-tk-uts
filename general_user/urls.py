@@ -7,6 +7,7 @@ urlpatterns = [
     path('', views.homepage, name="homepage"),
     path('login/', views.login_user, name="login"),
     path('login_flutter/', views.login_user_flutter, name="login_flutter"),
+    path('register_flutter/', views.register_flutter, name="register_flutter"),
     path('register/', views.register, name="register"),
     path('logout/', views.logout_user, name="logout"),
     path('get_galang/<id>', views.get_galang, name="get_galang"),
