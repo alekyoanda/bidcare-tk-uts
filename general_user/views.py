@@ -8,10 +8,11 @@ from django.urls import reverse
 from django.contrib import messages
 from django.core import serializers
 from general_user.forms import RegisterForm, RekeningBankForm
-from general_user.models import GeneralUser
+from general_user.models import GeneralUser, RekeningBank
 from resipien.models import GalangDana
 from lelang.models import BarangLelang
 from django.views.decorators.csrf import csrf_exempt
+from django.contrib.auth.models import User
 # Create your views here.
 
 def homepage(request):
@@ -80,6 +81,53 @@ def register(request):
             
     context = {"form": form, "form_bank": form_bank}
     return render(request, "general_user/register.html", context)
+def register_flutter(request):
+    if request.method == 'POST':
+        first_name = request.POST.get('first_name')
+        last_name = request.POST.get('last_name')
+        email = request.POST.get('email')
+        username = request.POST.get('username')
+        password = request.POST.get('first_name')
+        nomor_ponsel = request.POST.get('nomor_ponsel')
+        nama_bank = request.POST.get('nama_bank')
+        no_rekening = request.POST.get('no_rekening')
+        nama_pemilik = request.POST.get('nama_pemilik')
+        is_user_already_exist = User.objects.filter(username=username).exists()
+        if (first_name == '') or (last_name == '') or (email =='') or (username == '') or (password == '') or (nomor_ponsel == '') or (no_rekening == '') or (nama_pemilik == ''): 
+            return JsonResponse({
+              "status": False,
+              "message": "Harap mengisi semua form :)"
+            }, status=401)
+        elif (len(nomor_ponsel)>16 or nomor_ponsel.isnumeric()):
+            return JsonResponse({
+              "status": False,
+              "message": "Nomor Ponsel yang dimasukkan tidak sesuai :)"
+            }, status=401)
+        elif (len(no_rekening)>16 or no_rekening.isnumeric()):
+            return JsonResponse({
+              "status": False,
+              "message": "Password harus sama"
+            }, status=401)
+        elif (not is_user_already_exist):
+            user = User.objects.create_user(username=username,password=password)
+            user.save()
+            rekening_bank = RekeningBank.objects.create(nama_pemilik = nama_pemilik, nama_bank = nama_bank, no_rekening = no_rekening)
+            rekening_bank.save()
+            GeneralUser.objects.create(user=user, akun_bank=rekening_bank, no_ponsel = nomor_ponsel)
+            user = authenticate(request, username=username, password=password)
+            return JsonResponse({
+                "status": True,
+                "username": user.username,
+            }, status=200)
+        else:
+            return JsonResponse({
+              "status": False,
+              "message": "Username sudah terdaftar"
+            }, status=401)
+    else:
+        return JsonResponse({
+            "status": "Something Wrong T_T"
+        }, status=401)
 
 def logout_user(request):
     logout(request)
