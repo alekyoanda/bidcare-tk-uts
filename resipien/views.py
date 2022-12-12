@@ -4,6 +4,7 @@ from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 from general_user.forms import RekeningBankForm
 from general_user.models import GeneralUser, RekeningBank
+from django.contrib.auth.models import User
 from resipien.models import GalangDana, KomentarGalang
 from resipien.forms import GalangForm, KomentarGalangForm
 import datetime
@@ -103,7 +104,7 @@ def show_json_lelang(request, id):
     return HttpResponse(serializers.serialize("json", objek_lelang), content_type="application/json")  
 
 def show_json_akun(request, id):
-    objek_user = GeneralUser.objects.filter(pk=id)
+    objek_user = User.objects.filter(pk=id)
     return HttpResponse(serializers.serialize("json", objek_user), content_type="application/json")  
 
 # Flutter
