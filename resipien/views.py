@@ -48,7 +48,7 @@ def show_buat_galang(request):
 def show_daftar_galang(request):     
     data_galang = GalangDana.objects.all().order_by('-status_keaktifan')
     for galang in data_galang:
-        if timesince(galang.tanggal_berakhir)[0] != "0" or galang.terkumpul == galang.target:
+        if timesince(galang.tanggal_berakhir)[0] != "0" :
             galang.status_keaktifan = False
             galang.save()
         galang.terkumpul = 0
@@ -100,7 +100,7 @@ def show_json_bank(request, id):
     return HttpResponse(serializers.serialize("json", akun_bank), content_type="application/json")  
 
 def show_json_komentar(request, id):
-    data_komentar = KomentarGalang.objects.filter(objek_galang=id)
+    data_komentar = KomentarGalang.objects.filter(objek_galang=id).order_by('tanggal_komentar')[::-1]
     return HttpResponse(serializers.serialize("json", data_komentar), content_type="application/json")  
 
 def show_json_lelang(request, id):
