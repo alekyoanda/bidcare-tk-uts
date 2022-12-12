@@ -63,7 +63,7 @@ def show_daftar_galang(request):
 
 def show_detail_galang(request, id):     
     objek_galang = GalangDana.objects.get(id=id)
-    objek_lelang = BarangLelang.objects.filter(galang_dana_tujuan = galang).order_by('-status_keaktifan', 'tanggal_berakhir')
+    objek_lelang = BarangLelang.objects.filter(galang_dana_tujuan = objek_galang).order_by('-status_keaktifan', 'tanggal_berakhir')
     data_komentar = KomentarGalang.objects.filter(objek_galang=id)
     formKomentar = KomentarGalangForm(request.POST or None)
     rasio_donasi = objek_galang.terkumpul/objek_galang.target * 100
