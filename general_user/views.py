@@ -100,7 +100,7 @@ def register_flutter(request):
               "status": False,
               "message": "Harap mengisi semua form :)"
             }, status=401)
-        elif (len(nomor_ponsel)>16 or nomor_ponsel.isnumeric()):
+        elif (len(nomor_ponsel)>16 or not nomor_ponsel.isnumeric()):
             return JsonResponse({
               "status": False,
               "message": "Nomor Ponsel yang dimasukkan tidak sesuai :)"
