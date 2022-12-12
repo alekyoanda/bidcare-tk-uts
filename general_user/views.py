@@ -134,7 +134,7 @@ def register_flutter(request):
             rekening_bank = RekeningBank.objects.create(nama_pemilik = nama_pemilik, nama_bank = nama_bank, no_rekening = no_rekening)
             rekening_bank.save()
             GeneralUser.objects.create(user=user, akun_bank=rekening_bank, no_ponsel = nomor_ponsel)
-            user = authenticate(request, username=username, password=password)
+            # user = authenticate(request, username=username, password=password)
             return JsonResponse({
                 "status": True,
                 "username": user.username,
